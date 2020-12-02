@@ -1,42 +1,74 @@
-document.addEventListener("DOMContentLoaded",function(){
- const count = document.getElementById('counter')   
- let counter = document.getElementById("counter");
- const minus = document.getElementById("minus");
- const plus = document.getElementById("plus");
- const heart = document.getElementById("heart");
- const submit = document.getElementById("submit");
- const pause = document.getElementById("pause");
- const buttons = [minus, plus, heart, submit]
- let timePaused = false;
- 
- let timeRunning = setInterval(increment, 1000)
- 
- function increment() {
-     if (timePaused == false) {
-     counter.innerText++;
-     }
- }
-
-})
-
-    minus.addEventListener('click', function(){
-    counter.innerText--;
-    })
-
-    plus.addEventListener('click', function(){
-    counter.innerText++;
-    })
-
-    pause.addEventListener('click', function(){
-        if (pause.innerText === 'pause' ){
-        pause.innerText = 'resume'
-        buttons.forEach(function(button) {
-            button.disabled = true
-        })
-        timePaused = true ;}
-    })
+n = document.getElementById("counter");
+minus = document.getElementById("minus");
+plus = document.getElementById("plus");
+heart = document.getElementById("heart");
+faveNum = [];
+favoriteNums = [];
+pause = document.getElementById("pause");
+likeList = document.getElementById("likes");
+commentList = document.getElementById("list");
+comment = document.getElementById("comment-input");
+submit = document.getElementById("submit");
 
 
 
+function countUp() {
+    const nNum = parseInt(n.innerText);    
+    n.innerText = nNum + 1;
+}
 
+function minusOne() {
+    const nNum = parseInt(n.innerText);
+    n.innerText = nNum - 1;
+}
 
+function liked() {
+    let list = document.createElement("li");
+    let weLike = 1
+    if (faveNum.includes(n.innerText)) {
+
+        // weLike ++
+        let textLi = document.createTextNode(n.innerText + " has been liked " + weLike + " times" );
+    }
+    else {
+        phrase = (n.innerText + " has been liked " + weLike + " time");
+        favoriteNums.push([n.innerText, phrase]);
+        textLi = document.createTextNode(phrase);
+    }
+    list.appendChild(textLi);
+    likeList.appendChild(list);
+    faveNum.push(n.innerText);
+}
+
+let counter = setInterval(countUp, 1000);
+
+minus.addEventListener("click", minusOne);
+plus.addEventListener("click", countUp);
+heart.addEventListener("click", liked);
+submit.addEventListener("click", function commented(event) {
+    let paragraph = document.createElement("p");
+    let newParagraph = document.createTextNode(comment.value);
+    paragraph.appendChild(newParagraph);
+    commentList.appendChild(paragraph);
+    event.preventDefault();
+});
+
+pause.addEventListener("click", function paused(event) {
+    if (pause.innerText == "pause") {
+        clearInterval(counter);
+        minus.disabled = true;
+        plus.disabled = true;
+        heart.disabled = true;
+        submit.disabled = true;
+        pause.innerText = "resume";
+    }    
+    else if (pause.innerText == "resume") {
+        console.log("hello");
+        setInterval(countUp, 1000);
+        minus.disabled = false;
+        plus.disabled = false;
+        heart.disabled = false;
+        submit.disabled = false;
+        pause.innerText = "pause";
+    }
+});
